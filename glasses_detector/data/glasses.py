@@ -58,7 +58,7 @@ def _download_raw_dataset():
 
 
 def _process_raw_dataset():
-    with zipfile.Zipfile(RAW_DATA_FILENAME, 'r') as zip_ref:
+    with zipfile.ZipFile(RAW_DATA_FILENAME, 'r') as zip_ref:
         zip_ref.extractall(RAW_DATA_DIRNAME)
     
     labels = pd.read_csv(RAW_DATA_LABELS_FILENAME, sep=' ', header=None, names=['Filename', 'Label'])

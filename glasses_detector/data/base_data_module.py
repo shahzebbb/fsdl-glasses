@@ -9,7 +9,6 @@ import pytorch_lightning as pl
 import torch
 from torch.utils.data import ConcatDataset, DataLoader
 
-from glasses_detector import utils
 from glasses_detector.data.utils import BaseDataset
 
 BATCH_SIZE = 128
