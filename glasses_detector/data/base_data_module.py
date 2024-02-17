@@ -37,13 +37,13 @@ class BaseDataModule(pl.LightningDataModule):
         # Make sure to set the variable below in subclasses
         self.input_dims: Tuple[int, ...]
         self.output_dims: Tuple[int, ...]
-        self.mapping: Collection
         self.data_train: Union[BaseDataset, ConcatDataset]
         self.data_val: Union[BaseDataset, ConcatDataset]
         self.data_test: Union[BaseDataset, ConcatDataset]
 
     @classmethod
     def data_dirname(cls):
+        pass
         
     @staticmethod
     def add_to_argparse(parse):
