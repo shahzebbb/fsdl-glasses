@@ -14,6 +14,6 @@ ESSENTIALS_FILENAME = shared.DATA_DIRNAME / "processed" / "glasses_essentials.js
 IMAGES_URL = 'http://tinyurl.com/ycykr2eh'
 LABELS_URL = 'https://raw.githubusercontent.com/cleardusk/MeGlass/master/meta.txt'
 
-INPUT_DIMS = (1, 120, 120)
+INPUT_DIMS = (3, 120, 120)
 OUTPUT_DIMS = (1,)
 MAPPING = {0: 'No Glasses', 1: 'Glasses'}
