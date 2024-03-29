@@ -45,7 +45,7 @@ class BaseDataModule(pl.LightningDataModule):
         pass
         
     @staticmethod
-    def add_to_argparse(parse):
+    def add_to_argparse(parser):
         parser.add_argument(
             "--batch_size",
             type = int,
