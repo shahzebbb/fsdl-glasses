@@ -1,0 +1,1 @@
+from .cnn_simple import CNN
