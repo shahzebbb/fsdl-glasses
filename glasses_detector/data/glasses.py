@@ -12,6 +12,7 @@ from multiprocessing import Pool
 import glasses_detector.metadata.glasses as metadata
 from glasses_detector.data.base_data_module import BaseDataModule
 from glasses_detector.data.utils import download_url, BaseDataset, split_dataset
+from glasses_detector.stems.data_augmentation import DataAugmentation
 
 RAW_DATA_DIRNAME = metadata.RAW_DATA_DIRNAME
 RAW_DATA_IMAGE_DIRNAME = metadata.RAW_DATA_IMAGE_DIRNAME
@@ -33,8 +34,8 @@ class Glasses(BaseDataModule):
     def __init__(self, args=None):
         super().__init__(args)
 
-        from torchvision import transforms
-        self.transform = transforms.ToTensor()
+        
+        self.transform = DataAugmentation()
         self.mapping = metadata.MAPPING
         self.inverse_mapping = {v: k for k, v in self.mapping.items()}
         self.input_dims = metadata.INPUT_DIMS
@@ -54,12 +55,13 @@ class Glasses(BaseDataModule):
 
             data_trainval = BaseDataset(self.x_trainval, self.y_trainval, transform=self.transform)
             self.data_train, self.data_val = split_dataset(base_dataset=data_trainval, fraction=TRAIN_FRAC, seed=42)
+            self.data_val.transform = None
 
         if stage == "test" or stage is None:
             with h5py.File(PROCESSED_DATA_FILENAME, "r") as f:
-                self.x_test = f["x_test"][:]
+                self.x_test = f["X_test"][:]
                 self.y_test = f["y_test"][:].squeeze().astype(int)
-            self.data_test = BaseDataset(self.x_test, self.y_test, transform=self.transform)
+            self.data_test = BaseDataset(self.x_test, self.y_test, transform=None)
     
     
     def __repr__(self):

@@ -2,8 +2,10 @@ from typing import Any, Callable, Dict, Sequence, Tuple, Union
 from urllib.request import urlretrieve
 
 import torch
+from torchvision import transforms
 from PIL import Image
 from tqdm import tqdm
+
 
 
 SequenceOrTensor = Union[Sequence, torch.Tensor]
@@ -39,6 +41,7 @@ class BaseDataset(torch.utils.data.Dataset):
 
         self.data = data
         self.targets = targets
+        self.tensor_transform = transforms.ToTensor()
         self.transform = transform
         self.target_transform = target_transform
 
@@ -62,11 +65,14 @@ class BaseDataset(torch.utils.data.Dataset):
 
         datum, target = self.data[index], self.targets[index]
 
+
         if self.transform is not None:
             datum = self.transform(datum)
 
         if self.target_transform is not None:
             target = self.target_transform(target)
+        
+        datum = self.tensor_transform(datum)
 
         return datum, target
     
