@@ -134,6 +134,12 @@ def main():
     summary_callback = pl.callbacks.ModelSummary(max_depth=2)
 
     callbacks = [summary_callback, checkpoint_callback]
+    if args.wandb:
+        logger = pl.loggers.WandbLogger(log_model="all", save_dir=str(log_dir), job_type="train")
+        logger.watch(model, log_freq=max(100, args.log_every_n_steps))
+        logger.log_hyperparams(vars(args))
+        experiment_dir = logger.experiment.dir
+
     if args.stop_early:
         early_stopping_callback = pl.callbacks.EarlyStopping(
             monitor="validation/loss", mode="min", patience=args.stop_early
@@ -149,9 +155,10 @@ def main():
     best_model_path = checkpoint_callback.best_model_path
     if best_model_path:
         rank_zero_info("Best model saved at: {best_model_path}")
-        trainer.test(datamodule=data, ckpt_pth=best_model_path)
+        #trainer.test(datamodule=data, ckpt_pth=best_model_path)
     else:
-        trainer.test(lit_model, datamodule=data)
+        pass
+        #trainer.test(lit_model, datamodule=data)
 
     
 if __name__ == "__main__":
