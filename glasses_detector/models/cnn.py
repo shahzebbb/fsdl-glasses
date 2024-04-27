@@ -1,13 +1,17 @@
 """Basic convolutional model"""
 
-import argparse 
+import argparse
+import math 
 from typing import Any, Dict
 
 import torch
 from torch import nn
 import torch.nn.functional as F
 
+CONV_LAYERS = 1
 CONV_DIM = 64
+CONV_KERNEL_SIZE = 3
+CONV_STRIDE = 1
 FC_DIM = 128
 FC_DROPOUT = 0.25
 
@@ -18,9 +22,10 @@ class ConvBlock(nn.Module):
     Simple 3x3 conv with padding size 1 (to leave the input size unchanged, followed by a ReLU.)
     """
 
-    def __init__(self, input_channels: int, output_channels: int) -> None:
+    def __init__(self, input_size: int, input_channels: int, output_channels: int, kernel_size: int, stride: int) -> None:
         super().__init__()
-        self.conv = nn.Conv2d(input_channels, output_channels, kernel_size = 3, stride=1, padding=1)
+        padding = math.ceil(((stride-1)*input_size - stride + kernel_size) / 2)
+        self.conv = nn.Conv2d(input_channels, output_channels, kernel_size = kernel_size, stride=stride, padding=padding)
         self.relu = nn.ReLU()
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -42,7 +47,7 @@ class ConvBlock(nn.Module):
         r = self.relu(x)
         return r
 
-class CNNSimple(nn.Module):
+class CNN(nn.Module):
     """Simple CNN for image recognition in a square image."""
 
     def __init__(self, data_config: Dict[str, Any], args: argparse.Namespace = None):
@@ -58,12 +63,17 @@ class CNNSimple(nn.Module):
 
         num_classes = len(self.data_config["mapping"])
 
+        conv_layers = self.args.get("conv_layers", CONV_LAYERS)
         conv_dim = self.args.get("conv_dim", CONV_DIM)
+        conv_kernel_size = self.args.get("conv_kernel_size", CONV_KERNEL_SIZE)
+        conv_stride = self.args.get("conv_stride", CONV_STRIDE)
         fc_dim = self.args.get("fc_dim", FC_DIM)
         fc_dropout = self.args.get("fc_dropout", FC_DROPOUT)
 
-        self.conv1 = ConvBlock(input_channels, conv_dim)
-        self.conv2 = ConvBlock(conv_dim, conv_dim)
+        self.conv1 = ConvBlock(input_channels, conv_dim, conv_kernel_size, conv_stride)
+        conv_layers = [ConvBlock(conv_dim, conv_dim, conv_kernel_size, conv_stride) 
+               for _ in range(conv_layers)]
+        self.conv_layers = nn.Sequential(*conv_layers)
         self.dropout = nn.Dropout(fc_dropout)
         self.max_pool = nn.MaxPool2d(2)
 
@@ -92,7 +102,7 @@ class CNNSimple(nn.Module):
         B, Ch, H, W = x.shape
         assert H == self.input_height and W == self.input_width, f"bad inputs to CNN with shape {x.shape}"
         x = self.conv1(x) # B, CONV_DIM, H, W
-        x = self.conv2(x) # B, CONV_DIM, H, W
+        x = self.conv_layers(x) # B, CONV_DIM, H, W
         x = self.max_pool(x) # B, CONV_DIM, H // 2, W // 2
         x = self.dropout(x)
         x = torch.flatten(x, 1) # B, CONV_DIM * H // 2 * W // 2
@@ -103,7 +113,10 @@ class CNNSimple(nn.Module):
     
     @staticmethod
     def add_to_argparse(parser):
+        parser.add_argument("--conv_layers", type=int, default=CONV_LAYERS)
         parser.add_argument("--conv_dim", type=int, default=CONV_DIM)
+        parser.add_argument("--conv_kernel_size", type=int, default=CONV_KERNEL_SIZE)
+        parser.add_argument("--conv_stride", type=int, default=CONV_STRIDE)
         parser.add_argument("--fc_dim", type=int, default=FC_DIM)
         parser.add_argument("--fc_dropout", type=float, default=FC_DROPOUT)
         return parser

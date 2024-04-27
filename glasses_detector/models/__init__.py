@@ -1,1 +1,2 @@
-from .cnn_simple import CNN
+from .cnn import CNN
+from .cnn_simple import CNNSimple
