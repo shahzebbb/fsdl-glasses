@@ -10,9 +10,9 @@ class DataAugmentation:
         self.transforms = transforms.Compose([
         transforms.ToPILImage(),
         transforms.RandomApply([
-            transforms.RandomHorizontalFlip(p=p),
-            transforms.RandomVerticalFlip(p=p),
-            transforms.RandomRotation(degrees=(-45, 45), p=p),
+            transforms.RandomHorizontalFlip(p=0.8),
+            transforms.RandomVerticalFlip(p=0.8),
+            transforms.RandomRotation(degrees=(-45, 45)),
             transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1)
         ], p=p),
     ])

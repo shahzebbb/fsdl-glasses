@@ -70,8 +70,8 @@ class CNN(nn.Module):
         fc_dim = self.args.get("fc_dim", FC_DIM)
         fc_dropout = self.args.get("fc_dropout", FC_DROPOUT)
 
-        self.conv1 = ConvBlock(input_channels, conv_dim, conv_kernel_size, conv_stride)
-        conv_layers = [ConvBlock(conv_dim, conv_dim, conv_kernel_size, conv_stride) 
+        self.conv1 = ConvBlock(input_height, input_channels, conv_dim, conv_kernel_size, conv_stride)
+        conv_layers = [ConvBlock(input_height, conv_dim, conv_dim, conv_kernel_size, conv_stride) 
                for _ in range(conv_layers)]
         self.conv_layers = nn.Sequential(*conv_layers)
         self.dropout = nn.Dropout(fc_dropout)

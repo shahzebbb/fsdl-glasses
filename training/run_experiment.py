@@ -28,6 +28,12 @@ def _setup_parser():
 
     # Basic arguments
     parser.add_argument(
+        "--wandb",
+        action="store_true",
+        default=False,
+        help="If passed, logs experiment results to Weights & Biases. Otherwise logs only to local Tensorboard.",
+    )
+    parser.add_argument(
         "--data_class",
         type=str,
         default="Glasses",
