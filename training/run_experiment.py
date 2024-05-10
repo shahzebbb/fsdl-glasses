@@ -143,6 +143,8 @@ def main():
     if args.wandb:
         logger = pl.loggers.WandbLogger(log_model="all", save_dir=str(log_dir), job_type="train")
         logger.watch(model, log_freq=max(100, args.log_every_n_steps))
+        num_parameters = sum(p.numel() for p in model.parameters())
+        logger.log_hyperparams({"model_parameters_count": num_parameters})
         logger.log_hyperparams(vars(args))
         experiment_dir = logger.experiment.dir
 
