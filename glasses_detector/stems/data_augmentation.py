@@ -1,6 +1,6 @@
 import torch
 from torchvision import transforms
-from metadata.glasses import MEAN
+from glasses_detector.metadata.glasses import MEAN
 
 
 class DataAugmentation:
