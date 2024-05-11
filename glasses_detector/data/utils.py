@@ -71,8 +71,6 @@ class BaseDataset(torch.utils.data.Dataset):
 
         if self.target_transform is not None:
             target = self.target_transform(target)
-        
-        datum = self.tensor_transform(datum)
 
         return datum, target
     
