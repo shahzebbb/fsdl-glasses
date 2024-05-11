@@ -17,4 +17,4 @@ LABELS_URL = 'https://raw.githubusercontent.com/cleardusk/MeGlass/master/meta.tx
 INPUT_DIMS = (3, 120, 120)
 OUTPUT_DIMS = (1,)
 MAPPING = {0: 'No Glasses', 1: 'Glasses'}
-MEAN = (125.99106888,  96.0752454 ,  84.25908518)
+MEAN = (125.99106888 / 255,  96.0752454  / 255,  84.25908518 / 255)
