@@ -1,8 +1,8 @@
 # The program to run
-program: run_experiment_wandb_sweep.py
+program: training/run_experiment.py
 
 # Project this sweep is part of
-project: lstm_cnn_lr_sweep_002
+project: fsdl-glasses-detector
 entity: shahzebbb
   
 method: random  # generally, random searches perform well, can also be "grid" or "bayes"
@@ -15,7 +15,7 @@ parameters:
     conv_dim:
         values: [16, 32, 64, 128]
     conv_kernel_size:
-        values: [2, 3, 4, 5, 6]
+        values: [3, 5, 7, 9]
     fc_dim:
         values: [32, 64, 128, 256]
     fc_dropout:
@@ -31,6 +31,10 @@ parameters:
         value: CNN
     data_class:
         value: Glasses
+    batch_size:
+        value: 32
+    max_epochs:
+        value: 5
 
 command:
   - ${env}
