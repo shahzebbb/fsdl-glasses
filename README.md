@@ -42,7 +42,7 @@ Under 'glasses_detector/lit_models` you will find a `LightningModule` class whic
 
 Under `glasses_detector/metadata` you will find metadata for the project such as URLS, image sizes, URLs, etc.
 
-### Credits
+## Credits
 
 You can find the original dataset in this [repo.](https://github.com/cleardusk/MeGlass)
 I also want to credit the [Full Stack Deep Learning Course](https://fullstackdeeplearning.com/course/2022/) as I used most of the code from there as a guideline to how I should structure this repository.
