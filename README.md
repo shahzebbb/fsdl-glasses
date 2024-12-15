@@ -29,7 +29,7 @@ echo "export PYTHONPATH=.:$PYTHONPATH" >> ~/.bashrc
 
 ### Dataset
 
-Under `glasses_detector/data' you will find the code for all the data modules used to download and setup our data. Specifically, `glasses.py` contains the data module for the glasses detector model.
+Under `glasses_detector/data` you will find the code for all the data modules used to download and setup our data. Specifically, `glasses.py` contains the data module for the glasses detector model.
 
 Under `glasses_detector/data/utils.py` you will find code to set up a PyTorch Dataset class, split the dataset and download the data from a URL.
 
